@@ -1,38 +1,58 @@
 # geoip-api
 https://www.spigotmc.org/resources/api-geoip.28015/
 
-**What does it?**
+**MaxMind GeoLite Legacy databases were discontinued on January 2, 2019. This fork aims to maintain utmost compatibility with plugins that utilize GeoipAPI, while using GeoLite2.**
 
-With this api you can get the location of an ip/player, it uses GeoLite data created by MaxMind http://www.maxmind.com. The api will automatically download the database from the maxmind mirror!
+---
+#### How does this fork differ from the original?
 
+1. Re-written the majority of the codebase.
+	* Cleaned up unused code.
+	* Use more optimized methods overall.
+	* Prevented multiple NPEs in the process.
+2. The "DMA Code" and "Area Code" fields are not supported as they are not provided by GeoLite2.
+3. The local database copy is automatically updated every 7 days.
+4. More descriptive console output.
 
-**How to use?**
+In 90% of cases this will work as a drop-in replacement for the old GeoipAPI without the need to make adjustments to dependent code. No packages, classes, or methods have been re-named and the plugin will register with the same name.
 
-    
-    //Get the ip from a player
-    InetAddress ip = player.getAddress().getAddress();
-    
-    //Check if the ip is not null
-    if(ip == null){
-       return;
-    }
-     
-    //Check if the ip is not local    
-    if(ip.isAnyLocalAddress() || ip.isLoopbackAddress()){
-       return;
-    }
-    
-    //get the country, city & timezone of the user
-    GeoIP geo = new GeoIP(ip);
-    geo.countryName;
-    geo.city;
-    // etc
-    
+---
+
+**What does this do?**
+
+With this API you can fetch the location of a player's IP address from the GeoLite2 database provided by MaxMind at https://dev.maxmind.com/geoip/geoip2/geolite2/.
 
 
-**Plugin.yml**
+**How do I use it?**
 
-add this to your plugin.yml
+Add the following to your plugin.yml:
 ```yaml
 depend: [GeoipAPI]
+```
+---
+
+* Get the IP address of a player:
+```java
+InetAddress address = player.getAddress();
+```
+
+* Make sure that the IP address is not null:
+```java
+if(address == null) {
+	...
+}
+```
+
+* Check if the IP is a local address:
+```java
+if(address.isAnyLocalAddress() || address.isLoopbackAddress()) {
+	...
+}
+```
+
+* Get the location data of the address:
+```java
+GeoIP addressLocationData = new GeoIP(address);
+addressLocationData.countryName;
+addressLocationData.city;
 ```

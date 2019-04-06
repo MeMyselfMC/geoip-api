@@ -1,0 +1,6 @@
+name: GeoipAPI
+authors: [TheIndra, MeMyself]
+description: Access the MaxMind GeoLite2 City database from Minecraft.
+
+version: ${version}
+main: eu.theindra.geoip.GeoipAPI
